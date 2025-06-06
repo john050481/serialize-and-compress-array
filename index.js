@@ -35,8 +35,8 @@ function test(count, min, max) {
   let strFromGeneratedArr = arrGenerated.join('');
   let strFromCompressedArr = arrCompressed.join('');
 
-  console.log('initArrString length = ', strFromGeneratedArr.length, '; string = ', strFromGeneratedArr);
-  console.log('compressedArrString length = ', strFromCompressedArr.length, '; string = ', strFromCompressedArr);
+  console.log('INIT string length = ', strFromGeneratedArr.length, '\n', strFromGeneratedArr);
+  console.log('COMPRESSED string length = ', strFromCompressedArr.length, '\n', strFromCompressedArr);
 
   console.log('compress = ', 100 - Math.round((strFromCompressedArr.length / strFromGeneratedArr.length) * 100) + ' %');
 
