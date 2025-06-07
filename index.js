@@ -7,7 +7,14 @@ const deserialize = (str) => {
 };
 
 const randomInteger = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
-const generateArr = (count, min, max) => new Array(count).fill().map(() => randomInteger(min, max));
+const generateArr = (count, min, max, repeat = 1) => new Array(count).fill().map(() => {
+  const digit = randomInteger(min, max);
+  const arr = [];
+  for (let i = 1; i<= repeat; i++) {
+    arr.push(digit);
+  };
+  return arr;
+}).flat();
 const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
 
 // -------------------------------------------------------- TEST --------------------------------------------------------
@@ -28,8 +35,8 @@ const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
     - каждого числа по 3 - всего чисел 900.
 */
 
-function test(count, min, max) {
-  let arrGenerated = generateArr(count, min, max);
+function test(count, min, max, repeat = 1) {
+  let arrGenerated = generateArr(count, min, max, repeat);
   let arrCompressed = compressArr(arrGenerated);
 
   let strFromGeneratedArr = arrGenerated.join('');
@@ -45,7 +52,7 @@ function test(count, min, max) {
 };
 
 // 1
-// test(9, 1, 9);
+test(1000, 1, 99);
 
 // 2
 test(50, 1, 999);
@@ -57,3 +64,4 @@ test(1000, 1, 999);
 test(300, 1, 9);
 test(300, 10, 99);
 test(300, 100, 999);
+test(300, 100, 999, 3);
