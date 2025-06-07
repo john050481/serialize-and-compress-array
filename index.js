@@ -1,11 +1,3 @@
-const deserialize = (str) => {
-  let arr = [];
-  for (let c of str) {
-    arr.push(c.codePointAt(0));
-  }
-  return arr;
-};
-
 const randomInteger = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 const generateArr = (count, min, max, repeat = 1) => new Array(count).fill().map(() => {
   const digit = randomInteger(min, max);
@@ -15,8 +7,16 @@ const generateArr = (count, min, max, repeat = 1) => new Array(count).fill().map
   };
   return arr;
 }).flat();
-const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
 
+const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
+const serialize = (arr) => compressArr(arr).join('');
+const deserialize = (str) => {
+  let arr = [];
+  for (let c of str) {
+    arr.push(c.codePointAt(0));
+  }
+  return arr;
+};
 // -------------------------------------------------------- TEST --------------------------------------------------------
 /**
   В консоль выводится: исходная строка(+ длинна), сжатая строка(+ длинна), коэффициент сжатия, сравнение(строгое ===) с исходной после манипуляций.
@@ -35,33 +35,33 @@ const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
     - каждого числа по 3 - всего чисел 900.
 */
 
-function test(count, min, max, repeat = 1) {
+function test(title, count, min, max, repeat = 1) {
   let arrGenerated = generateArr(count, min, max, repeat);
-  let arrCompressed = compressArr(arrGenerated);
 
-  let strFromGeneratedArr = arrGenerated.join('');
-  let strFromCompressedArr = arrCompressed.join('');
+  let serializedInitArr = arrGenerated.join('');
+  let serializedCompressedArr = serialize(arrGenerated);
 
-  console.log('INIT string length = ', strFromGeneratedArr.length, '\n', strFromGeneratedArr);
-  console.log('COMPRESSED string length = ', strFromCompressedArr.length, '\n', strFromCompressedArr);
+  console.log(`%c ${title}`, 'color: red');
+  console.log(`%c COMPRESS = ${100 - Math.round((serializedCompressedArr.length / serializedInitArr.length) * 100)}` + `%c (inLength: ${serializedInitArr.length}, outLength: ${serializedCompressedArr.length})`, 'color: blue', 'color: black');
+  console.log(`%c IS EQUAL = ${deserialize(serializedCompressedArr).join('') === serializedInitArr}` + '%c (обратное преобразование и проверка на равенство)', 'color: blue', 'color: black');
 
-  console.log('compress = ', 100 - Math.round((strFromCompressedArr.length / strFromGeneratedArr.length) * 100) + ' %');
+  console.log('%c INIT string = ' + `%c ${serializedInitArr}`, 'color: blue', 'color: green');
+  console.log('%c COMPRESSED string = ' + `%c ${serializedCompressedArr}`, 'color: blue', 'color: green');
 
-  console.log('IS EQUAL = ', deserialize(strFromCompressedArr).join('') === strFromGeneratedArr);
-  console.log('------------------------------------------------------');
+  console.log('=========================================================================================');
 };
 
 // 1
-test(1000, 1, 99);
+test('Простые от 1 до 99', 1000, 1, 99);
 
 // 2
-test(50, 1, 999);
-test(100, 1, 999);
-test(500, 1, 999);
-test(1000, 1, 999);
+test('Случайные 50шт', 50, 1, 300);
+test('Случайные 100шт', 100, 1, 300);
+test('Случайные 500шт', 500, 1, 300);
+test('Случайные 1000шт', 1000, 1, 300);
 
 // 3
-test(300, 1, 9);
-test(300, 10, 99);
-test(300, 100, 999);
-test(300, 100, 999, 3);
+test('Граничные 900шт, цифры: от 1 до 9', 900, 1, 9);
+test('Граничные 900шт, цифры: от 10 до 99', 900, 10, 99);
+test('Граничные 900шт, цифры: от 100 до 300', 900, 100, 300);
+test('Граничные 900шт, цифры: от 1 до 300, каждая цифра повторяется 3 раза', 300, 1, 300, 3);
