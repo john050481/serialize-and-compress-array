@@ -41,9 +41,12 @@ function test(title, count, min, max, repeat = 1) {
   let serializedInitArr = arrGenerated.join('');
   let serializedCompressedArr = serialize(arrGenerated);
 
+  const compress = 100 - Math.round((serializedCompressedArr.length / serializedInitArr.length) * 10000)/100;
+  const isEqual = deserialize(serializedCompressedArr).join('') === serializedInitArr;
+
   console.log(`%c ${title}`, 'color: red');
-  console.log(`%c COMPRESS = ${100 - Math.round((serializedCompressedArr.length / serializedInitArr.length) * 100)}` + `%c (inLength: ${serializedInitArr.length}, outLength: ${serializedCompressedArr.length})`, 'color: blue', 'color: black');
-  console.log(`%c IS EQUAL = ${deserialize(serializedCompressedArr).join('') === serializedInitArr}` + '%c (обратное преобразование и проверка на равенство)', 'color: blue', 'color: black');
+  console.log(`%c COMPRESS = ${compress}` + `%c (inLength: ${serializedInitArr.length}, outLength: ${serializedCompressedArr.length})`, 'color: blue', 'color: black');
+  console.log(`%c IS EQUAL = ${isEqual}` + '%c (обратное преобразование и проверка на равенство)', 'color: blue', 'color: black');
 
   console.log('%c INIT string = ' + `%c ${serializedInitArr}`, 'color: blue', 'color: green');
   console.log('%c COMPRESSED string = ' + `%c ${serializedCompressedArr}`, 'color: blue', 'color: green');
