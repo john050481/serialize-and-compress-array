@@ -10,13 +10,7 @@ const generateArr = (count, min, max, repeat = 1) => new Array(count).fill().map
 
 const compressArr = (arr) => arr.map((i) => String.fromCodePoint(i));
 const serialize = (arr) => compressArr(arr).join('');
-const deserialize = (str) => {
-  let arr = [];
-  for (let c of str) {
-    arr.push(c.codePointAt(0));
-  }
-  return arr;
-};
+const deserialize = (str) => str.split('').map(c => c.codePointAt(0));
 // -------------------------------------------------------- TEST --------------------------------------------------------
 /**
   В консоль выводится: исходная строка(+ длинна), сжатая строка(+ длинна), коэффициент сжатия, сравнение(строгое ===) с исходной после манипуляций.
